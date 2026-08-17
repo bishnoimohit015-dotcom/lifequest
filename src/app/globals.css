@@ -1,0 +1,230 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --bg: #f5f4ee;
+  --surface: #faf9f4;
+  --raised: #fefdfa;
+  --line: #e4e2d6;
+  --line-strong: #cfccbc;
+  --ink: #24281f;
+  --ink-soft: #59604f;
+  --ink-faint: #8f947f;
+  --moss: #3f6d4e;
+  --moss-hover: #345c41;
+  --on-moss: #f3f6ee;
+  --moss-soft: #e2ecdc;
+  --moss-tint: #f0f4e9;
+  --leaf: #38624a;
+  --ember: #c06a3b;
+  --ember-soft: #f7e8dc;
+  --gold: #a0801f;
+  --gold-soft: #f4ecd2;
+  --danger: #a84a38;
+  --danger-soft: #f6e6e1;
+}
+
+.dark {
+  --bg: #14170f;
+  --surface: #191d13;
+  --raised: #20251a;
+  --line: #2d3324;
+  --line-strong: #404834;
+  --ink: #e8e7da;
+  --ink-soft: #a9ae97;
+  --ink-faint: #767d66;
+  --moss: #4e8a5f;
+  --moss-hover: #5c9c6d;
+  --on-moss: #f0f4ea;
+  --moss-soft: #26331f;
+  --moss-tint: #1d2416;
+  --leaf: #9ac6a1;
+  --ember: #d08a57;
+  --ember-soft: #33261a;
+  --gold: #cfa94a;
+  --gold-soft: #2e2a18;
+  --danger: #c26a58;
+  --danger-soft: #33201b;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-faint: var(--ink-faint);
+  --color-moss: var(--moss);
+  --color-moss-hover: var(--moss-hover);
+  --color-on-moss: var(--on-moss);
+  --color-moss-soft: var(--moss-soft);
+  --color-moss-tint: var(--moss-tint);
+  --color-leaf: var(--leaf);
+  --color-ember: var(--ember);
+  --color-ember-soft: var(--ember-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-heading), var(--font-body), ui-sans-serif, sans-serif;
+}
+
+html {
+  scrollbar-gutter: stable;
+  /* Kill the grey flash on tap and the 300ms double-tap zoom delay on iOS */
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  font-feature-settings: "ss01" on;
+  /* Stops the whole page rubber-banding behind the installed app shell */
+  overscroll-behavior-y: none;
+}
+
+button,
+[role="checkbox"],
+[role="switch"],
+[role="radio"] {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* iOS Safari zooms the viewport when focusing any field under 16px.
+   Keep the visual scale small but the computed size at 16px on phones. */
+@media (max-width: 640px) {
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* Subtle paper-grain backdrop so surfaces never feel flat */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.5;
+  background-image: radial-gradient(
+      color-mix(in srgb, var(--ink) 5%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 22px 22px;
+  mask-image: linear-gradient(to bottom, black, transparent 60%);
+}
+
+:focus-visible {
+  outline: 2px solid var(--moss);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+::selection {
+  background: var(--moss-soft);
+  color: var(--leaf);
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pop-in {
+  0% {
+    transform: scale(0.6);
+  }
+  60% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes grow-bar {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.animate-toast-in {
+  animation: toast-in 0.25s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+.animate-pop-in {
+  animation: pop-in 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
+}
+.animate-rise-in {
+  animation: rise-in 0.35s ease-out both;
+}
+.animate-grow-bar {
+  transform-origin: bottom;
+  animation: grow-bar 0.6s cubic-bezier(0.25, 1, 0.4, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-toast-in,
+  .animate-pop-in,
+  .animate-rise-in,
+  .animate-grow-bar {
+    animation: none;
+  }
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* User-level "Animations: off" preference (Settings) */
+.no-anim *,
+.no-anim *::before,
+.no-anim *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+}
+
+/* Thin, unobtrusive scrollbars for the calendar strip */
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+.scroll-thin::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 8px;
+}
+.scroll-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
